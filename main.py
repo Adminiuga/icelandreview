@@ -85,7 +85,8 @@ def get_feed(feed_url: str) -> AtomFeed:
         AtomFeed: Atom rss feed instance
 
     """
-    atom = AtomFeed('Iceland Review', feed_url=feed_url)
+    atom = AtomFeed('Iceland Review', feed_url=feed_url, author='Iceland Review',
+        icon='https://www.icelandreview.com/wp-content/uploads/2018/06/ir-32x32.png')
     for post in posts:
         atom.add(get_feed_item(post))
 
