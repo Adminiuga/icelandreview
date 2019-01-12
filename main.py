@@ -6,14 +6,14 @@ All arguments found here https://www.icelandreview.com/wp-json/
 
 import os
 import datetime
-import ciso8601
+
 from apscheduler.events import EVENT_JOB_EXECUTED
 from flask import Flask, request, url_for, jsonify
 from flask_apscheduler import APScheduler
 import werkzeug
 from werkzeug.contrib.atom import AtomFeed, FeedEntry
 
-from utils import get_posts, get_age
+from utils import get_posts, get_age, parse_datetime
 
 url = 'https://www.icelandreview.com/wp-json/wp/v2/posts'
 
@@ -69,8 +69,8 @@ def get_feed_item(post: dict) -> FeedEntry:
         content=post['excerpt']['rendered'],
         content_type='html',
         url=post['link'],
-        updated=ciso8601.parse_datetime(post['modified_gmt']),
-        published=ciso8601.parse_datetime(post['date_gmt'])
+        updated=parse_datetime(post['modified_gmt']),
+        published=parse_datetime(post['date_gmt'])
     )
 
 
@@ -98,7 +98,7 @@ def root():  # pragma: no cover
     content = '<div>'
     for post in posts:
         content += '<br />{age}<a href="{url}">{title}</a>'.format(
-            age=get_age(today, ciso8601.parse_datetime(post['date_gmt'])),
+            age=get_age(today, parse_datetime(post['date_gmt'])),
             url=post['link'],
             title=post['title']['rendered']
         )

@@ -44,3 +44,18 @@ def get_age(now: datetime.date, then: datetime.datetime):
 
     """
     return (now-then.date()).days
+
+
+def parse_datetime(input: str) -> datetime.datetime:
+    """
+    Replaces cis8601.parse_datetime that was in use before.
+    Returns a datetime.datetime object parsed from the input string.
+
+    Args:
+        input (str): timestamp f.ex:
+
+    Returns:
+        datetime.datetime: parsed datetime object
+
+    """
+    return datetime.datetime.strptime(input, "%Y-%m-%dT%H:%M:%S")
