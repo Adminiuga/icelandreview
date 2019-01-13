@@ -8,7 +8,7 @@
         "s3_bucket": "zappa.icelandreview.app",
         "events": [{
             "function": "main.update_posts",
-            "expression": "rate(1 minute)"
+            "expression": "rate(1 hour)"
         }]
     }
 }
