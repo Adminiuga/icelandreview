@@ -8,46 +8,24 @@ import os
 import datetime
 
 from apscheduler.events import EVENT_JOB_EXECUTED
-from flask import Flask, request, url_for, jsonify
+from flask import Flask, request, url_for
 from flask_apscheduler import APScheduler
-import werkzeug
 from werkzeug.contrib.atom import AtomFeed, FeedEntry
 
 from utils import get_posts, get_age, parse_datetime
 
-url = 'https://www.icelandreview.com/wp-json/wp/v2/posts'
-
-
-class Config(object):
-    SCHEDULER_JOBS = [
-        # trigger for hourly updates
-        {
-            'id': 'hourly',
-            'func': get_posts,
-            'kwargs': {'url': url},
-            'trigger': 'interval',
-            'hours': 1
-        },
-        # trigger to run immediately for initial state
-        {
-            'id': 'immediate',
-            'func': get_posts,
-            'kwargs': {'url': url}
-        }
-    ]
-    SCHEDULER_API_ENABLED = True
-    SCHEDULER_TIMEZONE = 'UTC'
-
 
 app = Flask(__name__)
-app.config.from_object(Config())
+url = 'https://www.icelandreview.com/wp-json/wp/v2/posts'
 posts = {}
 
 
-def update_posts(event):
-    """
-    Updates the global posts dict with the latest scraped values from the website
-    """
+def update_posts():
+    global posts
+    posts = get_posts(url)
+
+
+def update_posts_from_event(event):
     global posts
     posts = event.retval
 
@@ -104,7 +82,7 @@ def root():  # pragma: no cover
             title=post['title']['rendered']
         )
     content += '</div>'
-    return '''<html><a href="atom.xml">Atom Feed</a><br />{}</html>'''.format(content)
+    return '''<html><a href="{}">Atom Feed</a><br />{}</html>'''.format(url_for('recent_feed'), content)
 
 
 @app.route('/atom.xml')
@@ -114,10 +92,32 @@ def recent_feed():  # pragma: no cover
 
 
 if __name__ == '__main__':  # pragma: no cover
+    class Config(object):
+        SCHEDULER_JOBS = [
+            # trigger for hourly updates
+            {
+                'id': 'hourly',
+                'func': get_posts,
+                'kwargs': {'url': url},
+                'trigger': 'interval',
+                'hours': 1
+            },
+            # trigger to run immediately for initial state
+            {
+                'id': 'immediate',
+                'func': get_posts,
+                'kwargs': {'url': url}
+            }
+        ]
+        SCHEDULER_API_ENABLED = True
+        SCHEDULER_TIMEZONE = 'UTC'
+
+    app.config.from_object(Config())
+
     flask_scheduler = APScheduler()
     flask_scheduler.init_app(app)
     flask_scheduler.start()
 
-    flask_scheduler.add_listener(update_posts, EVENT_JOB_EXECUTED)
+    flask_scheduler.add_listener(update_posts_from_event, EVENT_JOB_EXECUTED)
 
     app.run(host='0.0.0.0', port=os.getenv('PORT', 5000))

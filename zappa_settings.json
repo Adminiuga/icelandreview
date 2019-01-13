@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "app_function": "main.app",
+        "aws_region": "eu-central-1",
+        "profile_name": "default",
+        "project_name": "icelandreview",
+        "runtime": "python3.6",
+        "s3_bucket": "zappa.icelandreview.app",
+        "events": [{
+            "function": "main.update_posts",
+            "expression": "rate(1 minute)"
+        }]
+    }
+}

@@ -9,7 +9,7 @@ Running
 -------
 
 The application is builton Flask, and can simply be run using ``python main.py``. 
-The application uses Python 3.7.
+The application uses Python 3.6. This version of Python is used since the Zappa_ library doesn't support 3.7.
 
 Deploying
 ---------
@@ -31,6 +31,25 @@ The Docker image can be run on Herkou using the following commands:
     $ heroku container:push web
     $ heroku container:release web
 
+AWS Lambda
+^^^^^^^^^^
+
+We use Zappa_ to deploy and manage the application on AWS Lambda.
+
+Tocreate the application and deploy just run the following:
+
+.. code-block:: bash
+
+    # to initialise the first time
+    $ zappa init
+    # to deploy the first time
+    $ zappa deploy dev
+    # to update subsequently
+    $ zappa update dev
+
+The settings for the application on AWS Lambda are stored in 
+
 .. |Updates| image:: https://pyup.io/repos/github/aodj/icelandreview/shield.svg
     :target: https://pyup.io/repos/github/aodj/icelandreview/
     :alt: Updates
+.. _Zappa: https://github.com/Miserlou/Zappa
