@@ -43,9 +43,10 @@ def get_feed_item(post: dict) -> FeedEntry:
 
     """
     return FeedEntry(
+        id=post['guid']['rendered'],
         title=post['title']['rendered'],
-        content=post['excerpt']['rendered'],
-        content_type='html',
+        content=post['content']['rendered'],
+        summary=post['excerpt']['rendered'],
         url=post['link'],
         updated=parse_datetime(post['modified_gmt']),
         published=parse_datetime(post['date_gmt'])
