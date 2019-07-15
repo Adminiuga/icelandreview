@@ -37,7 +37,7 @@ def get_age(now: datetime.date, then: datetime.datetime):
     Returns the number of days between "now" and "then"
 
     Args:
-        now (datetim.date): today's date
+        now (datetime.date): today's date
         then: (datetime.datetime): posted datetime for the post
 
     Returns:
@@ -53,7 +53,7 @@ def parse_datetime(input: str) -> datetime.datetime:
     Returns a datetime.datetime object parsed from the input string.
 
     Args:
-        input (str): timestamp f.ex:
+        input (str): timestamp
 
     Returns:
         datetime.datetime: parsed datetime object
