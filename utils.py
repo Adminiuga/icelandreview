@@ -1,4 +1,5 @@
 import datetime
+import re
 import requests
 
 
@@ -59,3 +60,18 @@ def parse_datetime(input: str) -> datetime.datetime:
 
     """
     return datetime.datetime.strptime(input, "%Y-%m-%dT%H:%M:%S")
+
+
+def remove_macro_tags(input: str) -> str:
+    """
+    Removes the WordPress macros that sometimes appear in the rendered output
+    such as `[vc_row]`
+
+    Args:
+        input (str): the text to strip
+    
+    Returns:
+        str: stripped text
+    
+    """
+    return re.sub("\[\/?(vc|mk)[^\]]+\]", "", input)
