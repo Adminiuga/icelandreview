@@ -28,7 +28,7 @@ def get_posts(url: str) -> dict:
         dict: the parsed json response from the url
 
     """
-    response = requests.get(url, params={'after': get_date_range(), 'per_page': get_page_range()})
+    response = requests.get(url, params={"after": get_date_range(), "per_page": get_page_range()})
     return response.json()
 
 
@@ -44,7 +44,7 @@ def get_age(now: datetime.date, then: datetime.datetime):
         int: number of days between the two dates
 
     """
-    return (now-then.date()).days
+    return (now - then.date()).days
 
 
 def parse_datetime(input: str) -> datetime.datetime:

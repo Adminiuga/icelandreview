@@ -16,7 +16,7 @@ from utils import get_posts, get_age, parse_datetime, remove_macro_tags
 
 
 app = Flask(__name__)
-url = 'https://www.icelandreview.com/wp-json/wp/v2/posts'
+url = "https://www.icelandreview.com/wp-json/wp/v2/posts"
 posts = {}
 
 
@@ -43,13 +43,13 @@ def get_feed_item(post: dict) -> FeedEntry:
 
     """
     return FeedEntry(
-        id=post['guid']['rendered'],
-        title=post['title']['rendered'],
-        content=remove_macro_tags(post['content']['rendered']),
-        summary=remove_macro_tags(post['excerpt']['rendered']),
-        url=post['link'],
-        updated=parse_datetime(post['modified_gmt']),
-        published=parse_datetime(post['date_gmt'])
+        id=post["guid"]["rendered"],
+        title=post["title"]["rendered"],
+        content=remove_macro_tags(post["content"]["rendered"]),
+        summary=remove_macro_tags(post["excerpt"]["rendered"]),
+        url=post["link"],
+        updated=parse_datetime(post["modified_gmt"]),
+        published=parse_datetime(post["date_gmt"]),
     )
 
 
@@ -64,54 +64,47 @@ def get_feed(feed_url: str) -> AtomFeed:
         AtomFeed: Atom rss feed instance
 
     """
-    atom = AtomFeed('Iceland Review', feed_url=feed_url, author='Iceland Review',
-        icon='https://www.icelandreview.com/wp-content/uploads/2018/06/ir-32x32.png')
+    atom = AtomFeed(
+        "Iceland Review",
+        feed_url=feed_url,
+        author="Iceland Review",
+        icon="https://www.icelandreview.com/wp-content/uploads/2018/06/ir-32x32.png",
+    )
     for post in posts:
         atom.add(get_feed_item(post))
 
     return atom
 
 
-@app.route('/')
+@app.route("/")
 def root():  # pragma: no cover
     today = datetime.date.today()
-    content = '<div>'
+    content = "<div>"
     for post in posts:
         content += '<br />{age}<a href="{url}">{title}</a>'.format(
-            age=get_age(today, parse_datetime(post['date_gmt'])),
-            url=post['link'],
-            title=post['title']['rendered']
+            age=get_age(today, parse_datetime(post["date_gmt"])), url=post["link"], title=post["title"]["rendered"]
         )
-    content += '</div>'
-    return '''<html><a href="{}">Atom Feed</a><br />{}</html>'''.format(url_for('recent_feed'), content)
+    content += "</div>"
+    return """<html><a href="{}">Atom Feed</a><br />{}</html>""".format(url_for("recent_feed"), content)
 
 
-@app.route('/atom.xml')
+@app.route("/atom.xml")
 def recent_feed():  # pragma: no cover
     atom = get_feed(feed_url=request.url)
     return atom.get_response()
 
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
+
     class Config(object):
         SCHEDULER_JOBS = [
             # trigger for hourly updates
-            {
-                'id': 'hourly',
-                'func': get_posts,
-                'kwargs': {'url': url},
-                'trigger': 'interval',
-                'hours': 1
-            },
+            {"id": "hourly", "func": get_posts, "kwargs": {"url": url}, "trigger": "interval", "hours": 1},
             # trigger to run immediately for initial state
-            {
-                'id': 'immediate',
-                'func': get_posts,
-                'kwargs': {'url': url}
-            }
+            {"id": "immediate", "func": get_posts, "kwargs": {"url": url}},
         ]
         SCHEDULER_API_ENABLED = True
-        SCHEDULER_TIMEZONE = 'UTC'
+        SCHEDULER_TIMEZONE = "UTC"
 
     app.config.from_object(Config())
 
@@ -121,4 +114,4 @@ if __name__ == '__main__':  # pragma: no cover
 
     flask_scheduler.add_listener(update_posts_from_event, EVENT_JOB_EXECUTED)
 
-    app.run(host='0.0.0.0', port=os.getenv('PORT', 5000))
+    app.run(host="0.0.0.0", port=os.getenv("PORT", 5000))
