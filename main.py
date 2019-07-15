@@ -94,6 +94,12 @@ def recent_feed():  # pragma: no cover
     return atom.get_response()
 
 
+@app.route("/update")
+def update():
+    update_posts()
+    return "", 200
+
+
 if __name__ == "__main__":  # pragma: no cover
 
     class Config(object):
