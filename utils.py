@@ -65,7 +65,8 @@ def parse_datetime(input: str) -> datetime.datetime:
 def remove_macro_tags(input: str) -> str:
     """
     Removes the WordPress macros that sometimes appear in the rendered output
-    such as `[vc_row]`
+    such as `[vc_row]`. Also replaces the `mk_image` macro with an img tag to
+    show the images in the output.
 
     Args:
         input (str): the text to strip
@@ -74,4 +75,4 @@ def remove_macro_tags(input: str) -> str:
         str: stripped text
     
     """
-    return re.sub("\[\/?(vc|mk)[^\]]+\]", "", input)
+    return re.sub("\[mk_image[^\;]+\;([^\&]+)[^\]]+\]", r'\n<img src="\1">\n', re.sub("\[\/?vc[^\]]+\]", "", input))
