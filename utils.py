@@ -75,4 +75,7 @@ def remove_macro_tags(input: str) -> str:
         str: stripped text
     
     """
-    return re.sub("\[mk_image[^\;]+\;([^\&]+)[^\]]+\]", r'\n<img src="\1">\n', re.sub("\[\/?vc[^\]]+\]", "", input))
+
+    return re.sub(
+        "\[mk_image[^\;]+\;([^\&]+)[^\]]+\]", r'\n<img src="\1">\n', re.sub("\[\/?(vc|mk)[^\]]+\]", "", input)
+    )
