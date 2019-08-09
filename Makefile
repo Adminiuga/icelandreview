@@ -18,9 +18,10 @@ setup-env: ## setup the virtual environment
 setup-requirements: ## install requirements for the project
 	pip install -r requirements.txt
 	pip install -r requirements_dev.txt
+	pip install -r requirements_test.txt
 
 format: ## reformat the code
-	black -t py37 -l 120 *.py
+	black -t py37 -l 120 *.py tests/
 
 run: ## run the server locally
 	FLASK_ENV=development python main.py
@@ -30,3 +31,6 @@ deploy: ## deploy with Zappa
 
 update: ## update the deployed Zappa build
 	zappa update $(TARGET)
+
+test: ## invoke pytest
+	pytest .
