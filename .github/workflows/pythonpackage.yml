@@ -24,7 +24,7 @@ jobs:
     - name: Test with pytest
       run: |
         pip install -r requirements_test.txt
-        pytest
+        pytest --cov=.
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
