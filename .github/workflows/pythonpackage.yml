@@ -25,3 +25,8 @@ jobs:
       run: |
         pip install -r requirements_test.txt
         pytest
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+
