@@ -1,4 +1,4 @@
-|Updates|
+|Actions Status| |Updates|
 
 icelandreview
 =============
@@ -49,6 +49,7 @@ Tocreate the application and deploy just run the following:
 
 The settings for the application on AWS Lambda are stored in ``zappa_settings.json``
 
+.. |Actions Status| image:: https://github.com/aodj/icelandreview/workflows/pytest/badge.svg
 .. |Updates| image:: https://pyup.io/repos/github/aodj/icelandreview/shield.svg
     :target: https://pyup.io/repos/github/aodj/icelandreview/
     :alt: Updates
