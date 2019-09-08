@@ -1,4 +1,4 @@
-|Actions Status| |Updates|
+|Actions Status| |Coveralls| |Updates|
 
 icelandreview
 =============
@@ -53,4 +53,6 @@ The settings for the application on AWS Lambda are stored in ``zappa_settings.js
 .. |Updates| image:: https://pyup.io/repos/github/aodj/icelandreview/shield.svg
     :target: https://pyup.io/repos/github/aodj/icelandreview/
     :alt: Updates
+.. |Coveralls| image:: https://coveralls.io/repos/github/aodj/icelandreview/badge.svg?branch=HEAD
+    :target: https://coveralls.io/github/aodj/icelandreview?branch=HEAD
 .. _Zappa: https://github.com/Miserlou/Zappa
