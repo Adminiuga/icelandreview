@@ -22,12 +22,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Test with pytest
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: |
         pip install -r requirements_test.txt
         pytest --cov=.
-        coveralls --output=coverage.json
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        path-to-lcov: ./coverage.json
+        coveralls
